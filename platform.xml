@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE platform SYSTEM "https://simgrid.org/simgrid.dtd">
+<platform version="4.1">
+  <zone id="AS0" routing="Full">
+    <host id="worker0" speed="1e9flops"/>
+    <host id="worker1" speed="1e9flops"/>
+    <host id="worker2" speed="1e9flops"/>
+    <host id="worker3" speed="1e9flops"/>
+    <host id="worker4" speed="1e9flops"/>
+    <host id="worker5" speed="1e9flops"/>
+    <host id="worker6" speed="1e9flops"/>
+    <host id="worker7" speed="1e9flops"/>
+    <host id="worker8" speed="1e9flops"/>
+    <host id="worker9" speed="1e9flops"/>
+    <link id="lnk" bandwidth="1e9Bps" latency="0.001s"/>
+    <!-- Only specify one direction; routes are symmetrical -->
+    <route src="worker0" dst="worker1">
+      <link_ctn id="lnk"/>
+    </route>
+    <route src="worker0" dst="worker2">
+      <link_ctn id="lnk"/>
+    </route>
+    <route src="worker0" dst="worker3">
+      <link_ctn id="lnk"/>
+    </route>
+    <route src="worker0" dst="worker4">
+      <link_ctn id="lnk"/>
+    </route>
+    <route src="worker0" dst="worker5">
+      <link_ctn id="lnk"/>
+    </route>
+    <route src="worker0" dst="worker6">
+      <link_ctn id="lnk"/>
+    </route>
+    <route src="worker0" dst="worker7">
+      <link_ctn id="lnk"/>
+    </route>
+    <route src="worker0" dst="worker8">
+      <link_ctn id="lnk"/>
+    </route>
+    <route src="worker0" dst="worker9">
+      <link_ctn id="lnk"/>
+    </route>
+  </zone>
+</platform>
