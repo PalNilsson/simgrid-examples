@@ -9,11 +9,29 @@ The code is based on SimGrid version 3.36.
 
 Compile the code with
 <code>
-g++ -std=c++17 simgrid_cluster_with_errors.cpp -o simgrid_cluster -Wl,-rpath,/usr/local/lib -lsimgrid
+g++ -std=c++17 simgrid_cluster_with_errors.cpp -o simgrid_cluster_errors -Wl,-rpath,/usr/local/lib -lsimgrid
 </code>
 (assuming a local SimGrid installation in /usr/local/lib.)
 
 Run the code with
 <code>
-./simgrid_cluster
+./simgrid_cluster_errors
 </code>
+
+<b>simgrid_cluster_with_historical_errors</b>:
+This example is using the previous example but is randomizing errors using real historical PanDA pilot errors. The JSON file with the errors can be provided upon request.
+
+The code is based on SimGrid version 3.36.
+
+Compile the code with
+<code>
+g++ -std=c++17 simgrid_cluster_with_historical_errors.cpp -o simgrid_cluster_historical_errors -Wl,-rpath,/usr/local/lib -lsimgrid
+</code>
+(assuming a local SimGrid installation in /usr/local/lib.)
+
+Run the code with
+<code>
+./simgrid_cluster_historical_errors
+</code>
+
+(Code is not uploaded yet since it is in development).
