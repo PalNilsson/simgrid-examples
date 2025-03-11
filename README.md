@@ -1,7 +1,7 @@
 # simgrid-examples
 Various example codes for SimGrid.
 
-* simgrid_cluster_with_errors
+<b>simgrid_cluster_with_errors</b>
 This example sets up a single cluster with a few hosts and executes some jobs on the cluster. Job failures during running are simulated. At the end of running,
 a summary is displayed with the number of finished and failed jobs. The code is using the simple Mailbox method.
 
