@@ -31,7 +31,7 @@ g++ -std=c++17 simgrid_cluster_with_historical_errors.cpp -o simgrid_cluster_his
 
 Run the code with
 <code>
-./simgrid_cluster_historical_errors --input <input data> --n <number of jobs> --queue <queue name> [--mute]
+./simgrid_cluster_historical_errors --input \<input data\> --n \<number of jobs\> --queue \<queue name\> \[--mute\]
 </code>
 
 Note: In case of trouble with boost headers, find where they are and add the corresponding -I/opt/homebrew/opt/boost/include compiler flag.
