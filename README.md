@@ -19,7 +19,7 @@ Run the code with
 </code>
 
 <b>simgrid_cluster_with_historical_errors</b>:
-This example is using the previous example but is randomizing errors using real historical PanDA pilot errors. The JSON file with the errors can be provided upon request.
+This example is using the previous example but is randomizing errors using real historical PanDA pilot errors. The JSON file with the errors is currently provided (error_codes.json).
 
 The code is based on SimGrid version 3.36.
 
