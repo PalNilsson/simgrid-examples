@@ -11,7 +11,7 @@ Compile the code with
 <code>
 g++ -std=c++17 simgrid_cluster_with_errors.cpp -o simgrid_cluster_errors -Wl,-rpath,/usr/local/lib -lsimgrid
 </code>
-(assuming a local SimGrid installation in /usr/local/lib. In case of trouble with boost headers, find where they are and add the corresponding -I/opt/homebrew/opt/boost/include compiler flag).
+(assuming a local SimGrid installation in /usr/local/lib).
 
 Run the code with
 <code>
@@ -35,3 +35,5 @@ Run the code with
 </code>
 
 (Code is not uploaded yet since it is in development).
+
+In case of trouble with boost headers, find where they are and add the corresponding -I/opt/homebrew/opt/boost/include compiler flag.
