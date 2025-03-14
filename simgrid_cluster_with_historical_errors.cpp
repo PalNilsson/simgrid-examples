@@ -39,6 +39,44 @@ const int MAX_WORKERS = 20;
 bool muted = false;
 
 
+class ErrorCodeGenerator {
+    public:
+        // The constructor initializes the weights and the discrete distribution.
+        ErrorCodeGenerator(const std::map<std::string, int>& errorCodes)
+            : errorCodes_(errorCodes), gen_(std::random_device{}())
+        {
+            // Build the weights vector from the error codes
+            for (const auto& pair : errorCodes_) {
+                weights_.push_back(pair.second);
+            }
+            dist_ = std::discrete_distribution<>(weights_.begin(), weights_.end());
+        }
+        
+        // This function returns the next random error code.
+        int getNextErrorCode() {
+            // Generate a random index based on the weights
+            int randomIndex = dist_(gen_);
+            // Get the corresponding error code from the map.
+            auto it = std::next(errorCodes_.cbegin(), randomIndex);
+            try {
+                // Convert the error code string to int.
+                return std::stoi(it->first);
+            } catch (const std::invalid_argument& e) {
+                std::cout << "Error: '" << it->first << "' is not a valid integer error code." << std::endl;
+                return -1; // or handle the error appropriately
+            }
+        }
+        
+    private:
+        std::map<std::string, int> errorCodes_;
+        std::vector<double> weights_;
+        std::mt19937 gen_;
+        std::discrete_distribution<> dist_;
+    };
+
+// Global pointer to the error code generator.
+ErrorCodeGenerator* g_errorCodeGenerator = nullptr;
+
 // Function to parse command-line arguments
 // Returns a tuple with (input_file, n, queue_name)
 tuple<string, int, string> parseArguments(int argc, char* argv[]) {
@@ -110,15 +148,25 @@ void worker() {
             XBT_INFO("Worker %s: Received job %s with load %f",
                      this_actor::get_name().c_str(), job->name.c_str(), job->load);
         }
+
+        // Simulate the exit code of the job (will be 0 most of the time)
+        int exit_code = g_errorCodeGenerator->getNextErrorCode();
+        if (exit_code != 0) {
+            job->error_code = exit_code;
+            if (!muted) {
+                XBT_WARN("Worker %s: Simulated error %d on job %s", 
+                         this_actor::get_name().c_str(), exit_code, job->name.c_str());
+            }
+        }
+
         double elapsed = 0.0;
         double slice = 0.1;  // Process in increments of 0.1 seconds.
         while (elapsed < job->load) {
-            if (elapsed >= 10.0) {
+            if (elapsed >= 10.0 && job->error_code != 0) {
                 if (!muted) {
-                    XBT_WARN("Worker %s: Aborting job %s after 10 seconds",
+                    XBT_WARN("Worker %s: Aborting failed job %s after 10 seconds",
                              this_actor::get_name().c_str(), job->name.c_str());
                 }
-                job->error_code = -1;
                 break;
             }
             double remaining = job->load - elapsed;
@@ -225,39 +273,17 @@ int main(int argc, char* argv[]) {
     }
 
     // Extract error codes and counts for the target site
-    unordered_map<string, int> error_codes;
+    map<string, int> errorCodes;
     if (dictionary.count(queue_name) > 0) {
         for (const auto& [code, count] : dictionary[queue_name]) {
-            error_codes[code] = count;
+            errorCodes[code] = count;
         }
     } else {
         cout << "Site not found: " << queue_name << endl;
     }
 
-    // Calculate the total weight
-    int total_weight = 0;
-    for (const auto& pair : error_codes) {
-        total_weight += pair.second;
-    }
-
-    // Create a random number engine (Mersenne Twister with a state size of 19937 bits, seeded with a random number)
-    random_device rd;
-    mt19937 gen(rd());
-
-    // Create a discrete distribution
-    vector<double> weights;
-    for (const auto& pair : error_codes) {
-        weights.push_back(pair.second);
-    }
-    discrete_distribution<> dist(weights.begin(), weights.end());
-
-    int random_index{0};
-    int error_code{0};
-    string random_error_code{""};
-    auto it = error_codes.cbegin();
-    unordered_map<int, int> errorCounts;
-
-
+    // Create the error code generator
+    g_errorCodeGenerator = new ErrorCodeGenerator(errorCodes);
 
     // Initialize the SimGrid endgine
     Engine e(&argc, argv);
